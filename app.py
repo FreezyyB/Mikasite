@@ -2,11 +2,12 @@ from flask import Flask, request, jsonify, session
 from flask_cors import CORS
 import requests
 import random
+from flask import session
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "https://freezyyb.github.io"}}, supports_credentials=True)
 app.secret_key = "Snowdrop"
-from flask import session
+#from flask import session
 app.config["SESSION_COOKIE_HTTPONLY"] = False
 app.config["SESSION_COOKIE_SAMESITE"] = "None"
 app.config["SESSION_COOKIE_SECURE"] = True
