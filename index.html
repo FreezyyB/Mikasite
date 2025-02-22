@@ -3,28 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Random Line App</title>
+    <title>Mika's Random Line Generator</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to external CSS -->
 </head>
 <body>
 
-    <!-- Login Form -->
-    <div id="login-box">
-        <h2>Login</h2>
-        <input type="text" id="username" placeholder="Username"><br>
-        <input type="password" id="password" placeholder="Password"><br>
-        <button onclick="login()">Login</button>
-        <p id="login-message"></p>
-    </div>
+    <div class="container">
+        <!-- Login Box -->
+        <div id="login-box" class="card">
+            <h2>Login</h2>
+            <input type="text" id="username" placeholder="Username"><br>
+            <input type="password" id="password" placeholder="Password"><br>
+            <button class="btn" onclick="login()">Login</button>
+            <p id="login-message"></p>
+        </div>
 
-    <!-- Random Line Section (Hidden until logged in) -->
-    <div id="content" style="display: none;">
-        <button onclick="fetchLine()">Get Random Line</button>
-        <p id="output"></p>
-        <button onclick="logout()">Logout</button>
+        <!-- Content (Hidden Until Logged In) -->
+        <div id="content" class="card hidden">
+            <button class="btn" onclick="fetchLine()">Get Random Line</button>
+            <p id="output"></p>
+            <button class="btn logout" onclick="logout()">Logout</button>
+        </div>
     </div>
 
     <script>
-        const API_BASE = "https://mikasite.onrender.com";  // Replace with your actual Render URL
+        const API_BASE = "https://mikasite.onrender.com";  // Update with your Render URL
 
         async function login() {
             const username = document.getElementById("username").value;
@@ -41,7 +44,7 @@
             if (data.success) {
                 localStorage.setItem("loggedIn", "true");
                 document.getElementById("login-box").style.display = "none";
-                document.getElementById("content").style.display = "block";
+                document.getElementById("content").classList.remove("hidden");
             } else {
                 document.getElementById("login-message").innerText = "Invalid username or password.";
             }
@@ -51,29 +54,29 @@
             const response = await fetch(`${API_BASE}/random-line`, {
                 method: "GET",
                 credentials: "include",
-                headers: { "Content-Type": "application/json"}
+                headers: { "Content-Type": "application/json" }
             });
-            
+
             const data = await response.json();
             if (data.error) {
                 document.getElementById("output").innerText = "Unauthorized! Please log in.";
             } else {
-                document.getElementById("output").innerText = data.line;
+                document.getElementById("output").innerText = `"${data.line}"`;
             }
         }
 
         async function logout() {
-            await fetch(`${API_BASE}/logout`, { method: "POST" });
+            await fetch(`${API_BASE}/logout`, { method: "POST", credentials: "include" });
             localStorage.removeItem("loggedIn");
             document.getElementById("login-box").style.display = "block";
-            document.getElementById("content").style.display = "none";
+            document.getElementById("content").classList.add("hidden");
         }
 
         // Auto-login if session exists
         window.onload = function () {
             if (localStorage.getItem("loggedIn") === "true") {
                 document.getElementById("login-box").style.display = "none";
-                document.getElementById("content").style.display = "block";
+                document.getElementById("content").classList.remove("hidden");
             }
         };
     </script>
