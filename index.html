@@ -47,7 +47,11 @@
         }
 
         async function fetchLine() {
-            const response = await fetch(`${API_BASE}/random-line`);
+            const response = await fetch(`${API_BASE}/random-line`, {
+                method: "GET",
+                credentials: "include"
+            });
+            
             const data = await response.json();
             if (data.error) {
                 document.getElementById("output").innerText = "Unauthorized! Please log in.";
