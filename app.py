@@ -6,6 +6,10 @@ import random
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "https://freezyyb.github.io"}}, supports_credentials=True)
 app.secret_key = "Snowdrop"
+from flask import session
+app.config["SESSION_COOKIE_HTTPONLY"] = False
+app.config["SESSION_COOKIE_SAMESITE"] = "None"
+app.config["SESSION_COOKIE_SECURE"] = True
 
 # Enable sessions
 app.config["SESSION_TYPE"] = "filesystem"
