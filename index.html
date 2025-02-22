@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Line App</title>
+</head>
+<body>
+
+    <!-- Login Form -->
+    <div id="login-box">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Username"><br>
+        <input type="password" id="password" placeholder="Password"><br>
+        <button onclick="login()">Login</button>
+        <p id="login-message"></p>
+    </div>
+
+    <!-- Random Line Section (Hidden until logged in) -->
+    <div id="content" style="display: none;">
+        <button onclick="fetchLine()">Get Random Line</button>
+        <p id="output"></p>
+        <button onclick="logout()">Logout</button>
+    </div>
+
+    <script>
+        const API_BASE = "https://mikasite.onrender.com";  // Replace with your actual Render URL
+
+        async function login() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            const response = await fetch(`${API_BASE}/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password })
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                localStorage.setItem("loggedIn", "true");
+                document.getElementById("login-box").style.display = "none";
+                document.getElementById("content").style.display = "block";
+            } else {
+                document.getElementById("login-message").innerText = "Invalid username or password.";
+            }
+        }
+
+        async function fetchLine() {
+            const response = await fetch(`${API_BASE}/random-line`);
+            const data = await response.json();
+            if (data.error) {
+                document.getElementById("output").innerText = "Unauthorized! Please log in.";
+            } else {
+                document.getElementById("output").innerText = data.line;
+            }
+        }
+
+        async function logout() {
+            await fetch(`${API_BASE}/logout`, { method: "POST" });
+            localStorage.removeItem("loggedIn");
+            document.getElementById("login-box").style.display = "block";
+            document.getElementById("content").style.display = "none";
+        }
+
+        // Auto-login if session exists
+        window.onload = function () {
+            if (localStorage.getItem("loggedIn") === "true") {
+                document.getElementById("login-box").style.display = "none";
+                document.getElementById("content").style.display = "block";
+            }
+        };
+    </script>
+
+</body>
+</html>
