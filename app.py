@@ -9,7 +9,7 @@ app.secret_key = "Snowdrop"
 app.config["SESSION_TYPE"] = "filesystem"
 app.config["SESSION_PERMANENT"] = False
 
-GITHUB_RAW_URL = "https://raw.githubusercontent.com/FreezyyB/Mikasite/refs/heads/main/lines.txt"
+GITHUB_RAW_URL = "https://raw.githubusercontent.com/FreezyyB/Mikasite/main/lines.txt"
 
 # Preset login credentials
 USERNAME = "Mika"
@@ -33,12 +33,12 @@ def get_random_line():
     if response.status_code != 200:
         return jsonify({"error": "Could not fetch data"}), 500
     
-    lines = response.text.strip().slpit("\n")
+    lines = response.text.strip().split("\n")
     if not lines:
         return jsonify({"error": "No lines found"}), 500
     
     random_index = random.randint(0, len(lines) - 1)
-    return jsonify({"line:" lines[random_index]})
+    return jsonify({"line": lines[random_index]})
 
 @app.route('/logout', methods=['POST'])
 def logout():
