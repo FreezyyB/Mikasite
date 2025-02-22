@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify, session
+from flask_cors import CORS
 import requests
 import random
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "https://freezyyb.github.io"}}, supports_credentials=True)
 app.secret_key = "Snowdrop"
 
 # Enable sessions
