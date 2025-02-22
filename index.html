@@ -32,6 +32,7 @@
 
             const response = await fetch(`${API_BASE}/login`, {
                 method: "POST",
+                credentials: "include",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ username, password })
             });
@@ -49,7 +50,8 @@
         async function fetchLine() {
             const response = await fetch(`${API_BASE}/random-line`, {
                 method: "GET",
-                credentials: "include"
+                credentials: "include",
+                headers: { "Content-Type": "application/json"}
             });
             
             const data = await response.json();
